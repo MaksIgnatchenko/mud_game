@@ -1,5 +1,8 @@
 <?php
-require_once("functions.php");
+require_once("authorization.php");
+require_once("position.php");
+require_once("actions.php");
+require_once("game.php");
 $un = "root";
 $pw = "";
 $hn = "localhost";
@@ -10,9 +13,10 @@ try{
 catch (PDOException $e) {
     echo "Connection is not completed";
 }
-$userPdo = main_choose($pdo);   // Получает обьект соединения аккаунта пользователя с бд
-$pdo = null;                    // Закрывает администраторское соединение
+$userPdo = main_choose($pdo);   // Получает обьект соединения аккаунта пользователя с бд                 
 $user = getUser($userPdo);      // Получает логин аккаунта
-room($userPdo, $user, $delimiter);
-
-
+$charachter = room($userPdo, $user);
+$pdo = null;                    // Закрывает администраторское соединение
+while (true){
+    game($charachter, $userPdo);
+}
