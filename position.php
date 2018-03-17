@@ -2,9 +2,15 @@
 
 function position($name, $userPdo){    // Возвращает массив с нормером текущей локации и координат персонажа
     $charPos = [];
-    $query = $userPdo -> prepare("select cur_loc, posX, posY, name, basic_attack, id_weapon, id from charachters where name = :name");
+    $query = $userPdo -> prepare("select cur_loc, posX, posY, name, basic_attack, id, cur_health from charachters where name = :name");
     $query -> execute([":name" => $name]);    
-    $charPos = $query -> fetch();    
+    $charPos = $query -> fetch();
+    $queryIndic = $userPdo -> prepare("select sum(it.attack) as 'attack', sum(it.attack_range) as 'attack_range', sum(it.armor) as 'armor' from items_type it inner join items i on it.id_type = i.id_type where owner = :id and storage = 'c'");
+    $queryIndic -> execute([":id" => $charPos["id"]]);
+    $charInfo =  $queryIndic -> fetch();
+    $charPos = array_merge($charPos, $charInfo);
+    print_r($charPos);
+    print_r($charInfo);
     return $charPos;
 }
 
@@ -35,7 +41,7 @@ function location_objects($charPos, $userPdo){  // Возвращает масс
 
 //----------------------------------------------------------------------------------//
 
-function display_location($relativePos, $charPos, $userPdo){
+function display_location($loc_objects, $charPos, $userPdo){
     $locSize = getsizeloc($charPos, $userPdo);
     
     static $is_desc = 1;
@@ -65,7 +71,7 @@ LOC;
     echo $delimiter;
     echo "Что находится в локации: \n";
     $i = 1;
-    foreach ($relativePos as $rel){
+    foreach ($loc_objects as $rel){
         $union1 = "";
         $union2 = " ";
         $union3 = "";

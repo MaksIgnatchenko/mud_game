@@ -31,9 +31,9 @@ CREATE TABLE `charachters` (
   `posX` int(11) DEFAULT NULL,
   `posY` int(11) DEFAULT NULL,
   `basic_attack` int(11) DEFAULT NULL,
-  `id_weapon` int(11) DEFAULT NULL,
+  `cur_health` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `charachters` (
 
 LOCK TABLES `charachters` WRITE;
 /*!40000 ALTER TABLE `charachters` DISABLE KEYS */;
+INSERT INTO `charachters` VALUES (1,'test',1,'t',1,50,50,1,100);
 /*!40000 ALTER TABLE `charachters` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,8 +56,13 @@ DROP TABLE IF EXISTS `items`;
 CREATE TABLE `items` (
   `id_item` int(11) NOT NULL AUTO_INCREMENT,
   `id_type` int(11) NOT NULL,
+  `owner` int(11) DEFAULT NULL,
+  `storage` varchar(1) DEFAULT NULL,
+  `id_loc` int(11) DEFAULT NULL,
+  `posX` int(11) DEFAULT NULL,
+  `posY` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_item`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +71,7 @@ CREATE TABLE `items` (
 
 LOCK TABLES `items` WRITE;
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
-INSERT INTO `items` VALUES (1,1);
+INSERT INTO `items` VALUES (1,1,1,'c',NULL,NULL,NULL),(2,2,1,'c',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,9 +87,10 @@ CREATE TABLE `items_type` (
   `type` varchar(50) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `attack` int(11) DEFAULT NULL,
+  `armor` int(11) DEFAULT NULL,
   `attack_range` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +99,7 @@ CREATE TABLE `items_type` (
 
 LOCK TABLES `items_type` WRITE;
 /*!40000 ALTER TABLE `items_type` DISABLE KEYS */;
-INSERT INTO `items_type` VALUES (1,'weapon','Ржавый мечь',10,2);
+INSERT INTO `items_type` VALUES (1,'weapon','Ржавый мечь',10,0,2),(2,'body','Рубаха',0,5,0);
 /*!40000 ALTER TABLE `items_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,4 +199,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-16 16:44:49
+-- Dump completed on 2018-03-17 23:38:12

@@ -1,6 +1,8 @@
 <?php
 $delimiter = "\n---------------------------------------------------------------\n";
 function readconsole(){
+    global $delimiter;
+    echo $delimiter;
     $handle = fopen("php://stdin", "r");    
     $answer = trim(fgets($handle));
     if (preg_match("/[^A-Za-z0-9]/", $answer)) return strtolower(readconsole());
