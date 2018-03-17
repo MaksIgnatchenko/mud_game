@@ -2,7 +2,7 @@
 
 function position($name, $userPdo){    // Возвращает массив с нормером текущей локации и координат персонажа
     $charPos = [];
-    $query = $userPdo -> prepare("select cur_loc, posX, posY, name, basic_attack, id_weapon from charachters where name = :name");
+    $query = $userPdo -> prepare("select cur_loc, posX, posY, name, basic_attack, id_weapon, id from charachters where name = :name");
     $query -> execute([":name" => $name]);    
     $charPos = $query -> fetch();    
     return $charPos;
@@ -12,33 +12,28 @@ function position($name, $userPdo){    // Возвращает массив с �
 //-----------------------------------------------------------------------------------//
 
 function location_objects($charPos, $userPdo){  // Возвращает массив обьектов находящихся в локации
-    $npcPos = [];
+    $objects = [];
+    $loc_objects = [];
     $query = $userPdo -> prepare("select * from objects where cur_loc = :loc");
     $query -> execute([":loc" => $charPos["cur_loc"]]);
-    $npcPos = $query -> fetchAll();
-    return $npcPos;      
+    $objects = $query -> fetchAll();
+    foreach ($objects as $object){
+        $x = $charPos["posX"] - $object["posX"];
+        $y = $charPos["posY"] - $object["posY"];
+        $distance = sqrt($x**2 + $y**2);
+        $name = $object["name"];
+        $health = $object["cur_health"];
+        $idObj = $object["id_obj"];
+        $loc_objects[] = [$y, $x, $distance, $name, $health, $idObj];
+    }
+    usort($loc_objects, function($a, $b) {
+        return $a[2] <=> $b[2];
+    });
+    return $loc_objects;        
 }
 
 
 //----------------------------------------------------------------------------------//
-
-function relativepos($charPos, $npcPos){ // возвращает массив с относительным положением игровх обьектов относительно игрока и их характеристиками
-     
-    $relativePos = [];
-    foreach ($npcPos as $npc){
-        $x = $charPos["posX"] - $npc["posX"];
-        $y = $charPos["posY"] - $npc["posY"];
-        $distance = sqrt($x**2 + $y**2);
-        $name = $npc["name"];
-        $health = $npc["cur_health"]; 
-        $idObj = $npc["id_obj"];        
-        $relativePos[] = [$y, $x, $distance, $name, $health, $idObj];
-    }
-    usort($relativePos, function($a, $b) {
-        return $a[2] <=> $b[2];
-    });
-    return $relativePos;
-}
 
 function display_location($relativePos, $charPos, $userPdo){
     $locSize = getsizeloc($charPos, $userPdo);

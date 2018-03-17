@@ -13,10 +13,10 @@ try{
 catch (PDOException $e) {
     echo "Connection is not completed";
 }
-$userPdo = main_choose($pdo);   // Получает обьект соединения аккаунта пользователя с бд                 
-$user = getUser($userPdo);      // Получает логин аккаунта
-$charachter = room($userPdo, $user);
-$pdo = null;                    // Закрывает администраторское соединение
+$userPdo = main_choose($pdo);          // Получает обьект соединения аккаунта пользователя с бд                 
+$user = getUser($userPdo);             // Получает логин аккаунта
+$charachter = room($userPdo, $user);   // Получает ник персонажа 
+$pdo = null;                           // Закрывает администраторское соединение
 while (true){
     game($charachter, $userPdo);
 }

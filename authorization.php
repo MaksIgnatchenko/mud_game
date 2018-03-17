@@ -112,14 +112,14 @@ function room($userPdo, $user){
     $answer = readconsole();
     if ($answer == "c"){ 
         createCharachter($userPdo, $user);
-        return room($userPdo, $user, $delimiter);
+        return room($userPdo, $user);
     }
     if (chooseChar($names, $answer)){
         return chooseChar($names, $answer);
     }
         else {
             echo "\nУ Вас нету такого персонажа\n Выберите из имеющихся персонажей или создайте нового\n";
-            return room($userPdo, $user, $delimiter);
+            return room($userPdo, $user);
         }
 }
 
