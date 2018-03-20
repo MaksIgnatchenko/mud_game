@@ -7,10 +7,8 @@ function position($name, $userPdo){    // Возвращает массив с �
     $charPos = $query -> fetch();
     $queryIndic = $userPdo -> prepare("select sum(it.attack) as 'attack', sum(it.attack_range) as 'attack_range', sum(it.armor) as 'armor' from items_type it inner join items i on it.id_type = i.id_type where owner = :id and storage = 'c'");
     $queryIndic -> execute([":id" => $charPos["id"]]);
-    $charInfo =  $queryIndic -> fetch();
-    $charPos = array_merge($charPos, $charInfo);
-    print_r($charPos);
-    print_r($charInfo);
+    $charInfo =  $queryIndic -> fetch();    
+    $charPos = array_merge($charPos, $charInfo);       
     return $charPos;
 }
 
@@ -41,16 +39,13 @@ function location_objects($charPos, $userPdo){  // Возвращает масс
 
 //----------------------------------------------------------------------------------//
 
-function display_location($loc_objects, $charPos, $userPdo){
-    $locSize = getsizeloc($charPos, $userPdo);
-    
+function display_location($loc_objects, $charPos, $userPdo, $locSize){        
     static $is_desc = 1;
     $message_desc = "";
     if ($is_desc == 1) $message_desc = $locSize['description_loc'] . "\n";
     $is_desc++;
-    global $delimiter;
-    $locSize = getsizeloc($charPos, $userPdo);
-    $locName = $locSize['name_loc'];
+    global $delimiter;    
+    $locName = $locSize['name_loc'];    
     $locDesc = $locSize['description_loc'];
     $sizeX = $locSize['sizeX'];
     $sizeY = $locSize['sizeY'];
@@ -62,19 +57,17 @@ function display_location($loc_objects, $charPos, $userPdo){
 \n____________________________________________________________________________        
                                                                               
 Вы находитесь в локации $locName\n$message_desc\nРазмеры локации $sizeX x $sizeY м
-Ваше расположение до (верхней границы - $top м) (до нижней $bottom м) (левой - $left м) (до правой $right м)                                 
-   _____________________________________________________________________________\n                                                                       
-    
+Ваше расположение до (верхней границы - $top м) (до нижней $bottom м) (левой - $left м) (до правой $right м)
 LOC;
-    echo $delimiter;
     echo $locMessage;
     echo $delimiter;
-    echo "Что находится в локации: \n";
+    echo "Обзор локации: \n";
     $i = 1;
     foreach ($loc_objects as $rel){
         $union1 = "";
         $union2 = " ";
         $union3 = "";
+        $union4 = "";
         if ($rel[0] > 0) $messageX = abs($rel[0]) . " метров впереди";
         if ($rel[0] < 0) $messageX = abs($rel[0]) . " метров сзади";
         if ($rel[0] == 0) $messageX = "";
@@ -90,11 +83,31 @@ LOC;
         echo "\n $i " . $rel[3] . " (Здоровье - $rel[4])" . " находится " . $union1 . $messageX . $union2 . $messageY . $union3 . $union4 . " (до цели " . round($rel[2], 1) . " метров)";
         $i++;
     }
-    echo $delimiter;    
+    echo "\nДля получения игровой справки нажмите < h >";
+    echo "\n____________________________________________________________________________"; 
 }
 
 function getsizeloc($charPos, $userPdo){
     $query = $userPdo -> prepare("select name_loc, description_loc, sizeX, sizeY from locations where id_loc = :cur_loc");
     $query -> execute([":cur_loc" => $charPos["cur_loc"]]);
-    return $query -> fetch();
+    return $query -> fetch();    
 }
+
+function check_property($charPos, $userPdo){
+    $queryEquipment = $userPdo -> prepare("select it.type, it.name, attack, armor, attack_range from items_type it inner join items i on i.id_type = it.id_type where i.owner = :id and i.storage = 'c'");
+    $queryEquipment -> execute([":id" => $charPos["id"]]);
+    $charEquipment = $queryEquipment -> fetchAll();
+    $weapon = [];
+    $armor = [];
+    foreach ($charEquipment as $item){
+        if ($item['type'] == 'weapon'){
+            $weapon = ['name' => $item['name'], 'attack' => $item['attack'], 'range' => $item['attack_range']];
+        }
+        if ($item['type'] = 'armor'){
+            $armor = ['name' => $item['name'], 'armor' => $item['armor']];
+        }        
+    }
+    $equip = ['weapon' => $weapon, 'armor' => $armor];
+return $equip;
+}
+

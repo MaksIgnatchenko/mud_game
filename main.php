@@ -3,8 +3,9 @@ require_once("authorization.php");
 require_once("position.php");
 require_once("actions.php");
 require_once("game.php");
+require_once("random.php");
 $un = "root";
-$pw = "";
+$pw = "Delirium130";
 $hn = "localhost";
 $db = "";
 try{

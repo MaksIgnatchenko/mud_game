@@ -11,6 +11,7 @@ function readconsole(){
 }
 
 function main_choose($pdo){
+    global $delimiter;
     echo $delimiter;
     echo "\nДобро пожаловать в игру!!!\nДля входа в акканут нажмите  -  L\nДля регистрации нажмите  -  R\nИспользуйте только латинские символы и цифры при вводе и избегайте пробелов\n";
     $answer = readconsole();
@@ -28,6 +29,7 @@ function main_choose($pdo){
 }
 
 function login(){
+    global $delimiter;
     echo $delimiter;    
     echo "\nВведите Ваш логин\n";
     $un = readconsole();
@@ -65,6 +67,7 @@ function nick_check($pdo, $name){
 }
 
 function registration($pdo){
+    global $delimiter;
     echo $delimiter;
     echo "Введите желаемый логин...\n";
     $login = readconsole();    
@@ -74,8 +77,8 @@ function registration($pdo){
     }
     echo "\nВведите пароль\n";
     $password = readconsole();    
-    $verU = $pdo -> prepare("create user :login@localhost'");
-    $verU -> execute([":login" => $login]);
+    $verU = $pdo -> prepare("create user :login@'localhost' identified by :password");
+    $verU -> execute([":login" => $login, ":password" => $password]);
     $verR = $pdo -> prepare("grant select, insert, update, delete on *.* to :login@'localhost' identified by :password");
     $verR -> execute([":login" => $login, ":password" => $password]);
     $verF = $pdo->query("flush privileges");
@@ -132,7 +135,7 @@ function createCharachter($userPdo, $user){
             echo "Такой персонаж уже существует выберите другой ник ... \n";
             return createCharachter($userPdo, $user);
     }
-    $query = $userPdo -> prepare("insert into charachters (name, cur_loc, account, level, posX, posY, basic_attack, id_weapon) values (:name, :cur_loc, :user, 1, 50, 50, 1, 1)");
+    $query = $userPdo -> prepare("insert into charachters (name, cur_loc, account, level, posX, posY, basic_attack) values (:name, :cur_loc, :user, 1, 50, 50, 1)");
     $query -> execute([":name" => $name, ":cur_loc" => 1, ":user" => $user]);   
 }
 

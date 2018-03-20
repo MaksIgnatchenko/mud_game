@@ -1,7 +1,6 @@
 <?php
 
 function command_interpreter($charPos, $userPdo, $loc_objects){ //  Анализирует полученную строку и вызывает необходимую функцию
-    echo "Для получения игровой справки нажмите < h >";
     $help = <<<MARKER
 ___________________________________________________________________________________________________________
 |                                                                                                         |
@@ -19,7 +18,8 @@ ________________________________________________________________________________
 |   Атака:                                                                                                |
 |                                                                                                         |
 |   f - атаковать                                                                                         |
-|   f3 - атаковать моба № 3 из списка обьектов                                                            |
+|   f3 - атаковать моба № 3 из списка обьектов                                                            | 
+|   e - посмотреть экипировку                                                                             |
 |                                                                                                         |
 |   exit - выход из игры                                                                                  |
 |                                                                                                         |
@@ -27,10 +27,20 @@ ________________________________________________________________________________
 MARKER;
     $answer = readconsole();
     $command = strtolower($answer[0]);
-    $spec = intval($answer[1]);    
-    if (strpbrk($command, "h")) echo $help;
+    if (isset($answer[1])){
+        $spec = intval($answer[1]);        
+    }
+        else $spec = 0;
+    if (strpbrk($command, "h")){
+       echo $help;
+       return command_interpreter($charPos, $userPdo, $loc_objects);
+    }
+    if (strpbrk($command, "e")){
+        display_property(check_property($charPos, $userPdo));
+        return command_interpreter($charPos, $userPdo, $loc_objects);
+    }
     if (strpbrk($command, "wasd") && (strlen($answer) == 2) && ($spec <= 5)) running($command, $spec, $charPos, $userPdo);   
-    if (strpbrk($command, "f")) fight($command, $spec, $charPos, $userPdo, $loc_objects);
+    if (strpbrk($command, "f")) fight($command, $spec, $charPos, $userPdo, $loc_objects);    
     if (strpbrk($command, "exit")) exit(); 
 }
 
@@ -72,15 +82,12 @@ function running($command, $spec, $charPos,  $userPdo){
     $query -> execute([":posY" => $charPos["posY"], ":posX" => $charPos["posX"], ":name" => $charPos["name"]]);       
 }
 
-function fight($command, $spec, $charPos, $userPdo, $loc_objects){    
-    $query = $userPdo -> prepare("select it.attack, it.attack_range from items i inner join items_type it on i.id_type = it.id_type where i.id_item = :id_weapon");
-    $query -> execute([":id_weapon" => $charPos["id_weapon"]]);
-    $weapon_info = $query -> fetch();    
-    if ($loc_objects[$spec - 1][2] > $weapon_info["attack_range"]){
+function fight($command, $spec, $charPos, $userPdo, $loc_objects){     
+    if ($loc_objects[$spec - 1][2] > $charPos["attack_range"]){
         echo "\nВы не достаете до обьета для атаки. (Дистанция до обьекта ". $loc_objects[$spec - 1][2] . " м) (Ваш радиус атаки " . $loc_objects["attack_range"] . " м)\n";
         return command_interpreter($charPos, $userPdo, $loc_objects);
     }
-    $attack = $weapon_info["attack"] * $charPos["basic_attack"];
+    $attack = $charPos["attack"] * $charPos["basic_attack"];
     $npcCurHealth = $loc_objects[$spec - 1][4];
     $npcNewHealth =  $npcCurHealth - $attack;
     if ($npcNewHealth > 0){
@@ -93,6 +100,11 @@ function fight($command, $spec, $charPos, $userPdo, $loc_objects){
             $queryD = $userPdo -> prepare("delete from objects where id_obj = :obj");
             $queryD -> execute([":obj" => $loc_objects[$spec - 1][5]]);
         }
+}
+
+function display_property($equip){
+    echo "Оружие  <" . $equip['weapon']['name'] . "> Атака " . $equip['weapon']['attack'] . " Дистанция атаки " . $equip['weapon']['range'] . " м\n";
+    echo "Броня <" . $equip['armor']['name'] . "> Защита " . $equip['armor']['armor'] . "\n"; 
 }
 
 
