@@ -36,7 +36,7 @@ CREATE TABLE `charachters` (
   `gold` int(11) NOT NULL DEFAULT '0',
   `max_health` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `charachters` (
 
 LOCK TABLES `charachters` WRITE;
 /*!40000 ALTER TABLE `charachters` DISABLE KEYS */;
-INSERT INTO `charachters` VALUES (1,'test',1,'t',1,43,58,1,100,0,0,0),(2,'test',1,'test1',1,43,58,1,NULL,0,0,0),(3,'test2',1,'test1',1,50,50,1,NULL,0,0,0),(4,'solver',1,'silencer',1,50,50,1,NULL,0,0,0),(5,'omniknight',1,'silencer',1,50,50,1,100,0,0,0),(6,'qwqw',1,'qwqw',1,50,50,1,100,0,0,0),(7,'ghost',1,'maks',1,20,30,1,100,10,1,100);
+INSERT INTO `charachters` VALUES (1,'test',1,'t',1,43,58,1,100,0,0,0),(2,'test',1,'test1',1,43,58,1,NULL,0,0,0),(3,'test2',1,'test1',1,50,50,1,NULL,0,0,0),(4,'solver',1,'silencer',1,50,50,1,NULL,0,0,0),(5,'omniknight',1,'silencer',1,50,50,1,100,0,0,0),(6,'qwqw',1,'qwqw',1,50,50,1,100,0,0,0),(7,'ghost',1,'maks',1,25,20,1,100,20,2,100),(8,'slot',1,'vasi',1,50,50,1,100,0,0,100);
 /*!40000 ALTER TABLE `charachters` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +65,7 @@ CREATE TABLE `items` (
   `posX` int(11) DEFAULT NULL,
   `posY` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_item`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,7 @@ CREATE TABLE `items` (
 
 LOCK TABLES `items` WRITE;
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
-INSERT INTO `items` VALUES (1,1,1,'c',NULL,NULL,NULL),(2,2,1,'c',NULL,NULL,NULL),(3,1,5,'c',NULL,NULL,NULL),(4,2,5,'c',NULL,NULL,NULL),(5,1,6,'c',NULL,NULL,NULL),(6,2,6,'c',NULL,NULL,NULL),(7,1,7,'c',NULL,NULL,NULL),(8,2,7,'c',NULL,NULL,NULL);
+INSERT INTO `items` VALUES (1,1,1,'c',NULL,NULL,NULL),(2,2,1,'c',NULL,NULL,NULL),(3,1,5,'c',NULL,NULL,NULL),(4,2,5,'c',NULL,NULL,NULL),(5,1,6,'c',NULL,NULL,NULL),(6,2,6,'c',NULL,NULL,NULL),(7,1,7,'c',NULL,NULL,NULL),(8,2,7,'c',NULL,NULL,NULL),(9,1,8,'c',NULL,NULL,NULL),(10,2,8,'c',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,7 +175,7 @@ CREATE TABLE `objects` (
   `posX` int(11) DEFAULT NULL,
   `posY` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_obj`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,7 @@ CREATE TABLE `objects` (
 
 LOCK TABLES `objects` WRITE;
 /*!40000 ALTER TABLE `objects` DISABLE KEYS */;
-INSERT INTO `objects` VALUES (3,1,'Мешок с сеном',30,0,0,0,1,20,50),(5,1,'Мешок с сеном',30,0,0,0,1,90,80),(8,1,'Мешок с сеном',30,0,0,0,1,25,20),(9,1,'Мешок с сеном',30,0,0,0,1,40,40),(10,1,'Мешок с сеном',30,0,0,0,1,34,16),(11,1,'Мешок с сеном',30,0,0,0,1,27,96),(13,2,'Тренировочный голем',50,1,5,0,1,13,100),(17,2,'Тренировочный голем',50,1,5,0,1,95,62),(19,2,'Тренировочный голем',50,1,5,0,1,80,100),(20,2,'Тренировочный голем',50,1,5,0,1,39,30),(22,1,'Мешок с сеном',30,0,0,0,1,28,47),(23,2,'Тренировочный голем',50,1,5,0,1,48,93),(24,2,'Тренировочный голем',50,1,5,0,1,81,59),(25,1,'Мешок с сеном',30,0,0,0,1,26,75);
+INSERT INTO `objects` VALUES (3,1,'Мешок с сеном',30,0,0,0,1,20,50),(5,1,'Мешок с сеном',30,0,0,0,1,90,80),(9,1,'Мешок с сеном',30,0,0,0,1,40,40),(10,1,'Мешок с сеном',30,0,0,0,1,34,16),(11,1,'Мешок с сеном',30,0,0,0,1,27,96),(13,2,'Тренировочный голем',50,1,5,0,1,13,100),(17,2,'Тренировочный голем',50,1,5,0,1,95,62),(19,2,'Тренировочный голем',50,1,5,0,1,80,100),(20,2,'Тренировочный голем',50,1,5,0,1,39,30),(22,1,'Мешок с сеном',30,0,0,0,1,28,47),(23,2,'Тренировочный голем',50,1,5,0,1,48,93),(24,2,'Тренировочный голем',50,1,5,0,1,81,59),(25,1,'Мешок с сеном',30,0,0,0,1,26,75),(26,1,'Мешок с сеном',30,0,0,0,1,3,87);
 /*!40000 ALTER TABLE `objects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,4 +227,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-22 16:54:29
+-- Dump completed on 2018-03-27 23:11:57
